@@ -40,7 +40,7 @@ import java.util.UUID;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
-    private static Button button_refreshDevices,button_forward,button_back,button_left,button_right;
+    private static Button button_refreshDevices,button_forward,button_back,button_left,button_right,button_stop;
     private static BluetoothHelper bluetoothHelper;
     private static String message_toSend,message_received;
     private static int requestCodeForBluetooth=1;
@@ -59,11 +59,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         button_back=findViewById(R.id.button_back);
         button_left=findViewById(R.id.button_left);
         button_right=findViewById(R.id.button_right);
+        button_stop=findViewById(R.id.button_stop);
         listView_pairedDevices=findViewById(R.id.listView_pairedDevices);
         button_forward.setOnClickListener(this);
         button_back.setOnClickListener(this);
         button_left.setOnClickListener(this);
         button_right.setOnClickListener(this);
+        button_stop.setOnClickListener(this);
         button_refreshDevices.setOnClickListener(this);
         bluetoothHelper=new BluetoothHelper();
 
@@ -77,6 +79,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             button_back.setEnabled(true);
             button_left.setEnabled(true);
             button_right.setEnabled(true);
+            button_stop.setEnabled(true);
             listView_pairedDevices.setAdapter(new ArrayAdapter(this,R.layout.support_simple_spinner_dropdown_item,bluetoothHelper.getBondedDevices()));
         }
 
@@ -114,6 +117,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             else if (viewId == button_right.getId()) {
                 bluetoothHelper.getConnectionThread().write("3".getBytes(),targetDevice);
             }
+            else if (viewId == button_stop.getId()) {
+                bluetoothHelper.getConnectionThread().write("4".getBytes(),targetDevice);
+            }
         }
         else if(!isBluetoothEnabled()){
             Snackbar.make(coordinatorLayout,"Bluetooth is disabled",Snackbar.LENGTH_SHORT).show();
@@ -132,6 +138,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 button_back.setEnabled(true);
                 button_left.setEnabled(true);
                 button_right.setEnabled(true);
+                button_stop.setEnabled(true);
                 listView_pairedDevices.setAdapter(new ArrayAdapter(this,R.layout.support_simple_spinner_dropdown_item,bluetoothHelper.getBondedDevices()));
             }
             else{
